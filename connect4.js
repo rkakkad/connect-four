@@ -105,11 +105,11 @@ function handleClick(evt) {
   placeInTable(y, x);
   board[y][x] = currPlayer;
 
-  // check for win
-  if (checkForWin()) {
-    return endGame(`Player ${currPlayer} won!`);
-  }
-
+// check for win
+ if (checkForWin()) {
+      return endGame(`Player ${currPlayer} won!`);
+    }
+ 
   // check for tie
   // TODO: check if all cells in board are filled; if so call, call endGame
   const firstRow = document.querySelectorAll('tr')[1].childNodes;
