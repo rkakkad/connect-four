@@ -112,16 +112,16 @@ function handleClick(evt) {
  
   // check for tie
   // TODO: check if all cells in board are filled; if so call, call endGame
-  const firstRow = document.querySelectorAll('tr')[1].childNodes;
-  const firstRowChildren = [];
-  firstRow.forEach(function(x) {
-    firstRowChildren.push(x.innerHTML);
-  })
+  // const firstRow = document.querySelectorAll('tr')[1].childNodes;
+  // const firstRowChildren = [];
+  // firstRow.forEach(function(x) {
+  //   firstRowChildren.push(x.innerHTML);
+  // })
 
-  if(firstRowChildren.every(function(x) {
-  return x != "";
+  if(board[0].every(function(x) {
+  return x != null
   })) {
-    endGame();
+    endGame("Game Tied");
   }
   // switch players
   // TODO: switch currPlayer 1 <-> 2
