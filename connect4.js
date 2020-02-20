@@ -88,12 +88,24 @@ function endGame(msg) {
   alert(msg);
 }
 
-/** handleClick: handle click of column top to play piece */
+function changePlayer(p) {
+  currPlayer = (p === 1) ?  2 : 1;
+}
 
+
+/** handleClick: handle click of column top to play piece */
 function handleClick(evt) {
   // get x from ID of clicked cell
   let x = +evt.target.id;
+  gameMechanics(x);
+}
 
+function aiMove() {
+  return Math.floor(Math.random() * WIDTH);
+}
+
+/* function for game mechanics after players has selected a column */
+function gameMechanics(x) {
   // get next spot in column (if none, ignore click)
   let y = findSpotForCol(x);
   if (y === null) {
@@ -125,10 +137,11 @@ function handleClick(evt) {
   }
   // switch players
   // TODO: switch currPlayer 1 <-> 2
-  currPlayer = (currPlayer === 1) ?  2 : 1;
-
+  changePlayer(currPlayer);
+  if(currPlayer===2) {
+    gameMechanics(aiMove());
+  }
 }
-
 /** checkForWin: check board cell-by-cell for "does a win start here?" */
 
 function checkForWin() {
