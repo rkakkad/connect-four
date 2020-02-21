@@ -6,6 +6,7 @@
  */
 const WIDTH = 7;
 const HEIGHT = 6;
+let gameState = "not started";
 
 let currPlayer = 1; // active player: 1 or 2
 const board = []; // array of rows, each row is array of cells  (board[y][x])
@@ -61,8 +62,7 @@ function makeHtmlBoard() {
 function findSpotForCol(x) {
   // TODO: write the real version of this, rather than always returning 0
   for(let i=HEIGHT-1; i>=0;i--) {
-    const id = `#\\3${i}-\\3${x}`;
-    if(!document.querySelector(`${id}`).firstChild) {
+    if(board[i][x]==null) {
       return i;
     }
   }
@@ -75,17 +75,24 @@ function placeInTable(y, x) {
   // TODO: make a div and insert into correct table cell
   const id = `#\\3${y}-\\3${x}`;
   const tblCell = document.querySelector(`${id}`);
+  console.log(tblCell);
   const newDiv = document.createElement('div');
   newDiv.classList.add('piece');
   newDiv.classList.add(`p${currPlayer}`);
+  console.log(newDiv);
   tblCell.appendChild(newDiv);
 }
 
+function msgAlert(m) {
+ alert(m);
+}
 /** endGame: announce game end */
-
 function endGame(msg) {
   // TODO: pop up alert message
-  alert(msg);
+  gameState="gameover";
+  setTimeout(function() {
+    msgAlert(msg);
+  }, 150);
 }
 
 function changePlayer(p) {
@@ -95,13 +102,18 @@ function changePlayer(p) {
 
 /** handleClick: handle click of column top to play piece */
 function handleClick(evt) {
+  if(gameState==="not started") {
+    gameState="playing";
+  } else if(gameState==="gameover"|| currPlayer===2) {
+    return;
+  }
   // get x from ID of clicked cell
   let x = +evt.target.id;
   gameMechanics(x);
 }
 
 function aiMove() {
-  return Math.floor(Math.random() * WIDTH);
+    return Math.floor(Math.random() * WIDTH);
 }
 
 /* function for game mechanics after players has selected a column */
@@ -138,12 +150,18 @@ function gameMechanics(x) {
   // switch players
   // TODO: switch currPlayer 1 <-> 2
   changePlayer(currPlayer);
-  if(currPlayer===2) {
-    gameMechanics(aiMove());
-  }
+  nextMove();
 }
 /** checkForWin: check board cell-by-cell for "does a win start here?" */
 
+function nextMove() {
+  if(currPlayer===2) {
+    setTimeout(function() {
+      const x = aiMove();
+      gameMechanics(x);  
+    }, 1000);
+  }
+}
 function checkForWin() {
   function _win(cells) {
     // Check four cells to see if they're all color of current player
